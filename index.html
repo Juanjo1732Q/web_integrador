@@ -58,8 +58,15 @@
   <h1>Control de Producción</h1>
 
   <script>
-    let usuario = prompt("Holaa, ingresa el nombre del operario");
-    let componente = parseInt(prompt("Seleccione el tipo de componente producida por el operario:\n[1-Polímeros, 2-Cerámicos, 3-Metales]"));
+    
+  let usuario = prompt("Holaa, ingresa el nombre del operario");
+  let piezastotal = 0;
+  let totalValor = 0;
+  let registroDiario = [];
+  let continuar = "s";
+
+  while (continuar === "s") {
+    let componente = parseInt(prompt("Seleccione el tipo de componente producida hoy:\n[1-Polímeros, 2-Cerámicos, 3-Metales]"));
     let valor;
     let nombreComponente;
 
@@ -81,49 +88,44 @@
         nombreComponente = "Desconocido";
         alert("Componente no válido");
     }
-    
-    let piezastotal = 0;
-    let piezasdia = [];
-    let continuar = "s";
 
-    while (continuar === "s") {
-      let piezas = parseInt(prompt("Ingrese la cantidad de piezas producidas hoy:"));
-      piezasdia.push(piezas);
-      piezastotal += piezas;
-      continuar = prompt("¿Desea agregar otro día? [s/n]").toLowerCase();
-    }
+    let piezas = parseInt(prompt("Ingrese la cantidad de piezas producidas hoy:"));
+    registroDiario.push({ piezas, componente, nombreComponente, valor });
+    piezastotal += piezas;
+    totalValor += piezas * valor;
 
-    let totalValor = piezastotal * valor;
+    continuar = prompt("¿Desea agregar otro día? [s/n]").toLowerCase();
+  }
 
-    // Crear tabla de resultados
-    document.writeln("<table>");
-    document.writeln("<tr><th colspan='2'>Resumen del Operario</th></tr>");
-    document.writeln("<tr><td><b>Operario</b></td><td>" + usuario + "</td></tr>");
-    document.writeln("<tr><td><b>Tipo de componente</b></td><td>" + nombreComponente + "</td></tr>");
+  // Crear tabla de resultados
+  document.writeln("<table>");
+  document.writeln("<tr><th colspan='2'>Resumen del Operario</th></tr>");
+  document.writeln("<tr><td><b>Operario</b></td><td>" + usuario + "</td></tr>");
 
-    for (let i = 0; i < piezasdia.length; i++) {
-      document.writeln("<tr><td>Día " + (i + 1) + "</td><td>" + piezasdia[i] + " piezas</td></tr>");
-    }
+  for (let i = 0; i < registroDiario.length; i++) {
+    let dia = registroDiario[i];
+    document.writeln("<tr><td>Día " + (i + 1) + "</td><td>" + dia.piezas + " piezas (" + dia.nombreComponente + ")</td></tr>");
+  }
 
-    // Evaluar rendimiento
-    let rendimientoTexto = "";
-    let claseRendimiento = "";
+  // Evaluar rendimiento
+  let rendimientoTexto = "";
+  let claseRendimiento = "";
 
-    if (piezastotal < 50) {
-      rendimientoTexto = "El rendimiento del operario " + usuario + " es BAJO";
-      claseRendimiento = "bajo";
-    } else if (piezastotal >= 50 && piezastotal < 100) {
-      rendimientoTexto = "El rendimiento del operario " + usuario + " es ACEPTABLE";
-      claseRendimiento = "medio";
-    } else {
-      rendimientoTexto = "El rendimiento del operario " + usuario + " es EXCELENTE";
-      claseRendimiento = "alto";
-    }
+  if (piezastotal < 50) {
+    rendimientoTexto = "El rendimiento del operario " + usuario + " es BAJO";
+    claseRendimiento = "bajo";
+  } else if (piezastotal >= 50 && piezastotal < 100) {
+    rendimientoTexto = "El rendimiento del operario " + usuario + " es ACEPTABLE";
+    claseRendimiento = "medio";
+  } else {
+    rendimientoTexto = "El rendimiento del operario " + usuario + " es EXCELENTE";
+    claseRendimiento = "alto";
+  }
 
-    document.writeln("<tr class='" + claseRendimiento + "'><td colspan='2'>" + rendimientoTexto + "</td></tr>");
-    document.writeln("<tr><td><b>Total de piezas</b></td><td>" + piezastotal + "</td></tr>");
-    document.writeln("<tr><td><b>Valor total producido</b></td><td>$" + totalValor + "</td></tr>");
-    document.writeln("</table>");
+  document.writeln("<tr class='" + claseRendimiento + "'><td colspan='2'>" + rendimientoTexto + "</td></tr>");
+  document.writeln("<tr><td><b>Total de piezas</b></td><td>" + piezastotal + "</td></tr>");
+  document.writeln("<tr><td><b>Valor total producido</b></td><td>$" + totalValor + "</td></tr>");
+  document.writeln("</table>");
   </script>
 </body>
 </html>
